@@ -63,6 +63,5 @@ func (codec) Unmarshal(data []byte, v interface{}) error {
 }
 
 func (codec) Name() string {
-	// fmt.Println("获取" + Name)
 	return Name
 }

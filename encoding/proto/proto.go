@@ -4,7 +4,6 @@ package proto
 
 import (
 	"errors"
-	"fmt"
 	"reflect"
 
 	"github.com/joechen367/transport/encoding"
@@ -15,7 +14,6 @@ import (
 const Name = "proto"
 
 func init() {
-	fmt.Println("proto")
 	encoding.RegisterCodec(codec{})
 }
 
@@ -35,7 +33,6 @@ func (codec) Unmarshal(data []byte, v interface{}) error {
 }
 
 func (codec) Name() string {
-	// fmt.Println("获取" + Name)
 	return Name
 }
 
