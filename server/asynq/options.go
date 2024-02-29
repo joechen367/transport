@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/hibiken/asynq"
+	"github.com/joechen367/transport/encoding"
 )
 
 const (
@@ -96,5 +97,11 @@ func WithRetryDelayFunc(fn asynq.RetryDelayFunc) ServerOption {
 func WithStrictPriority(val bool) ServerOption {
 	return func(s *Server) {
 		s.asynqConfig.StrictPriority = val
+	}
+}
+
+func WithEncodingcode(code string) ServerOption {
+	return func(s *Server) {
+		s.codec = encoding.GetCodec(code)
 	}
 }

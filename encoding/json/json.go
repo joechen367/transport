@@ -2,9 +2,9 @@ package json
 
 import (
 	"encoding/json"
-	"reflect"
 
-	"google.golang.org/grpc/encoding"
+	"github.com/bytedance/sonic"
+	"github.com/joechen367/transport/encoding"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
@@ -37,7 +37,7 @@ func (codec) Marshal(v interface{}) ([]byte, error) {
 	case proto.Message:
 		return MarshalOptions.Marshal(m)
 	default:
-		return json.Marshal(m)
+		return sonic.Marshal(m)
 	}
 }
 
@@ -48,20 +48,21 @@ func (codec) Unmarshal(data []byte, v interface{}) error {
 	case proto.Message:
 		return UnmarshalOptions.Unmarshal(data, m)
 	default:
-		rv := reflect.ValueOf(v)
-		for rv := rv; rv.Kind() == reflect.Ptr; {
-			if rv.IsNil() {
-				rv.Set(reflect.New(rv.Type().Elem()))
-			}
-			rv = rv.Elem()
-		}
-		if m, ok := reflect.Indirect(rv).Interface().(proto.Message); ok {
-			return UnmarshalOptions.Unmarshal(data, m)
-		}
-		return json.Unmarshal(data, m)
+		// rv := reflect.ValueOf(v)
+		// for rv := rv; rv.Kind() == reflect.Ptr; {
+		// 	if rv.IsNil() {
+		// 		rv.Set(reflect.New(rv.Type().Elem()))
+		// 	}
+		// 	rv = rv.Elem()
+		// }
+		// if m, ok := reflect.Indirect(rv).Interface().(proto.Message); ok {
+		// 	return UnmarshalOptions.Unmarshal(data, m)
+		// }
+		return sonic.Unmarshal(data, v)
 	}
 }
 
 func (codec) Name() string {
+	// fmt.Println("获取" + Name)
 	return Name
 }

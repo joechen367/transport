@@ -6,7 +6,7 @@ type Event interface {
 	Topic() string
 
 	Message() *Message
-	RawMessage() any
+	RawMessage() interface{}
 
 	Ack() error
 

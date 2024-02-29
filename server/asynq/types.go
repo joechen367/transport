@@ -1,8 +1,8 @@
 package asynq
 
-type MessagePayload any
+type MessagePayload interface{}
 
-type Binder func() any
+type Binder func() interface{}
 
 type MessageHandler func(string, MessagePayload) error
 
