@@ -8,8 +8,8 @@ replace (
 )
 
 require (
-	github.com/joechen367/transport v0.0.0-00010101000000-000000000000
-	github.com/joechen367/transport/broker/rabbitmq v0.0.0-00010101000000-000000000000
+	github.com/joechen367/transport v1.0.6
+	github.com/joechen367/transport/broker/rabbitmq v1.0.6
 	go.opentelemetry.io/otel v1.24.0
 	go.opentelemetry.io/otel/trace v1.24.0
 )

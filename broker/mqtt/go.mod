@@ -7,7 +7,7 @@ replace github.com/joechen367/transport => ../../
 require (
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/go-kratos/kratos/v2 v2.7.2
-	github.com/joechen367/transport v0.0.0-00010101000000-000000000000
+	github.com/joechen367/transport v1.0.6
 )
 
 require (

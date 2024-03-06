@@ -9,8 +9,8 @@ replace (
 
 require (
 	github.com/go-kratos/kratos/v2 v2.7.2
-	github.com/joechen367/transport v0.0.0-00010101000000-000000000000
-	github.com/joechen367/transport/broker/mqtt v0.0.0-00010101000000-000000000000
+	github.com/joechen367/transport v1.0.6
+	github.com/joechen367/transport/broker/mqtt v1.0.6
 )
 
 require (
