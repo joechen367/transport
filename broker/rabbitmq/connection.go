@@ -4,13 +4,11 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
-	"fmt"
 	"strings"
 	"sync"
 	"time"
 
-	log "log/slog"
-
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/joechen367/transport/broker"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -164,19 +162,19 @@ func (r *rabbitConnection) reconnect(secure bool, config *amqp.Config) {
 				// Channel closed, probably also the channel or connection.
 				return
 			}
-			log.Error(fmt.Sprintf("notify error reason: %s, description: %s", result.ReplyText, result.Exchange))
+			log.Errorf("notify error reason: %s, description: %s", result.ReplyText, result.Exchange)
 		case err := <-chanNotifyClose:
-			log.Error(err.Error())
+			log.Error(err)
 			r.Lock()
 			r.connected = false
 			r.waitConnection = make(chan struct{})
 			r.Unlock()
 		case err := <-notifyClose:
-			log.Error(err.Error())
+			log.Error(err)
 
 			select {
 			case errs := <-chanNotifyClose:
-				log.Error(errs.Error())
+				log.Error(errs)
 			case <-time.After(time.Second):
 			}
 

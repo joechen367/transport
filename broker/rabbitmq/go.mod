@@ -5,6 +5,7 @@ go 1.22.2
 replace github.com/joechen367/transport => ../../
 
 require (
+	github.com/go-kratos/kratos/v2 v2.7.3
 	github.com/google/uuid v1.6.0
 	github.com/joechen367/transport v0.0.0-00010101000000-000000000000
 	github.com/rabbitmq/amqp091-go v1.10.0

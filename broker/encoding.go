@@ -11,10 +11,10 @@ import (
 )
 
 func Marshal(codec encoding.Codec, msg Any) ([]byte, error) {
-
 	if msg == nil {
 		return nil, errors.New("message is nil")
 	}
+
 	if codec != nil {
 		dataBuffer, err := codec.Marshal(msg)
 		if err != nil {

@@ -5,12 +5,13 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	log "log/slog"
 	"math/rand"
 	"net"
 	"net/http"
 	"net/url"
 	"os"
+
+	"github.com/go-kratos/kratos/v2/log"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -51,7 +52,8 @@ func (s *KeepAliveService) Start() error {
 	}
 
 	s.health.Resume()
-	log.Debug("keep alive service started at %s", s.lis.Addr().String())
+
+	log.Debugf("keep alive service started at %s", s.lis.Addr().String())
 
 	err := s.Serve(s.lis)
 	if !errors.Is(err, http.ErrServerClosed) {
@@ -127,8 +129,9 @@ func getIPAddress(interfaceName string) (string, error) {
 					return ipnet.IP.String(), nil
 				}
 			}
-			return "", errors.New("No IPv4 address found for interface " + interfaceName)
+			return "", fmt.Errorf("No IPv4 address found for interface %s", interfaceName)
 		}
 	}
-	return "", errors.New("Interface " + interfaceName + " not found")
+
+	return "", fmt.Errorf("Interface %s not found", interfaceName)
 }
