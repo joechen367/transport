@@ -1,7 +1,6 @@
 package rabbitmq
 
 import (
-	"context"
 	"crypto/tls"
 
 	"github.com/joechen367/transport/broker"
@@ -77,11 +76,5 @@ func WithTracerProvider(provider trace.TracerProvider, tracerName string) Server
 func WithPropagator(propagators propagation.TextMapPropagator) ServerOption {
 	return func(s *Server) {
 		s.brokerOpts = append(s.brokerOpts, broker.WithPropagator(propagators))
-	}
-}
-
-func WithOptsContext(ctx context.Context) ServerOption {
-	return func(s *Server) {
-		s.brokerOpts = append(s.brokerOpts, broker.WithOptionContext(ctx))
 	}
 }

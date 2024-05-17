@@ -1,7 +1,7 @@
 APP_VERSION=v1.0.6
 
-# PACKAGE_LIST =  broker/mqtt/ broker/rabbitmq/ server/rabbitmq/ server/asynq/
-PACKAGE_LIST =
+PACKAGE_LIST =  broker/mqtt/ broker/rabbitmq/ server/rabbitmq/ server/asynq/ server/mqtt/
+#PACKAGE_LIST =
 
 .PHONY: tag
 tag:

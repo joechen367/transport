@@ -6,15 +6,15 @@ import (
 	"net/url"
 	"sync"
 
-	log "log/slog"
-
+	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/joechen367/transport/broker"
 	"github.com/joechen367/transport/broker/rabbitmq"
 	"github.com/joechen367/transport/utils"
 )
 
-const (
-	KindRabbitMQ = "rabbitmq"
+var (
+	_ transport.Server     = (*Server)(nil)
+	_ transport.Endpointer = (*Server)(nil)
 )
 
 type SubscriberMap map[string]broker.Subscriber
@@ -24,7 +24,6 @@ type SubscribeOption struct {
 	binder           broker.Binder
 	subscribeOptions []broker.SubscribeOption
 }
-
 type SubscribeOptionMap map[string]*SubscribeOption
 
 type Server struct {
@@ -83,7 +82,7 @@ func (s *Server) Start(ctx context.Context) error {
 
 	s.err = s.Init()
 	if s.err != nil {
-		log.Info("rabbitmq init broker failed: [%s]", s.err.Error())
+		LogErrorf("init broker failed: [%s]", s.err.Error())
 		return s.err
 	}
 
@@ -98,7 +97,7 @@ func (s *Server) Start(ctx context.Context) error {
 		}()
 	}
 
-	log.Info("rabbitmq server listening on: %s", s.Address())
+	LogInfof("server listening on: %s", s.Address())
 
 	s.err = s.doRegisterSubscriberMap()
 	if s.err != nil {
@@ -112,7 +111,7 @@ func (s *Server) Start(ctx context.Context) error {
 }
 
 func (s *Server) Stop(_ context.Context) error {
-	log.Info("rabbitmq server stopping")
+	LogInfo("server stopping")
 	s.started = false
 	return s.Disconnect()
 }
@@ -169,14 +168,6 @@ func RegisterSubscriber[T any](srv *Server, ctx context.Context, topic string, h
 	)
 }
 
-func (s *Server) doRegisterSubscriberMap() error {
-	for topic, opt := range s.subscriberOpts {
-		_ = s.doRegisterSubscriber(topic, opt.handler, opt.binder, opt.subscribeOptions...)
-	}
-	s.subscriberOpts = SubscribeOptionMap{}
-	return nil
-}
-
 func (s *Server) doRegisterSubscriber(routingKey string, handler broker.Handler, binder broker.Binder, opts ...broker.SubscribeOption) error {
 	sub, err := s.Subscribe(routingKey, handler, binder, opts...)
 	if err != nil {
@@ -185,5 +176,13 @@ func (s *Server) doRegisterSubscriber(routingKey string, handler broker.Handler,
 
 	s.subscribers[routingKey] = sub
 
+	return nil
+}
+
+func (s *Server) doRegisterSubscriberMap() error {
+	for topic, opt := range s.subscriberOpts {
+		_ = s.doRegisterSubscriber(topic, opt.handler, opt.binder, opt.subscribeOptions...)
+	}
+	s.subscriberOpts = SubscribeOptionMap{}
 	return nil
 }
